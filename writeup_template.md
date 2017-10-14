@@ -78,12 +78,28 @@ The OpenCV functions findChessboardCorners and calibrateCamera are the backbone 
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+Function `cv2.calibrateCamera()` applied on chess board images returned  distorting coefficients required to undistort a camera image. 
+I have passed these coefficents to `cv2.undistort()` function to demonstrate undistorting for a test image.
+![alt text][image26]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of color and gradient thresholds to generate a binary image. For my pipe line i settled with the following combination though i experiemented with various other combinations. 
+
+a. Gradient - Sobel(x) with a threshold of (50,255)
+b. Gradient - Sobel(y) with a threshold of (50,255)
+c. Magnitude Gradient - with a threshold of (50,100)
+d. Directional Gradient - with a threshold of (0.5, 1.3)
+
+Then i combined the Gradient Thresholds above using the following method.
+
+`combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1`
+
+Below is the output of this combination of Gradient Threshold
+
+![alt text][image13]
+
+
 
 ![alt text][image3]
 
