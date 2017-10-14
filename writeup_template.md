@@ -25,7 +25,28 @@ The goals / steps of this project are the following:
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image11]: ./output_images/Histogram.png "Histogram"
+[image11]: ./output_images/ChessBoardCorners.png "ChessBoardCorners"
+[image12]: ./output_images/Combined_Color_Gradient_Threshold.png
+[image13]: ./output_images/Combined_Gradient.png
+[image14]: ./output_images/Directional_Gradient.png
+[image15]: ./output_images/H-L-S Channels.png
+[image16]: ./output_images/InverseTransformation_AllTestImages.png
+[image17]: ./output_images/L-a-b Channels.png
+[image18]: ./output_images/Lab-B Threshold.png
+[image19]: ./output_images/Lanefitment_lanepixels_windows_polyfill.png
+[image20]: ./output_images/LaneFitment_LanePixels_Windows.png
+[image21]: ./output_images/Magnitude_Gradient.png
+[image22]: ./output_images/Perspective_Transformation.png
+[image23]: ./output_images/R-Channel Threshold.png
+[image24]: ./output_images/R-G-B Channels of GrayScale.png
+[image25]: ./output_images/S-Channel Threshold.png.png
+[image26]: ./output_images/Undistorted_ChessBoard.png
+[image26]: ./output_images/Undistorted_Highway.png
+[image27]: ./output_images/X_Gradient_Threshold.png
+[image28]: ./output_images/Y_Gradient_Threshold.png
+
+[video1]: ./project_video_output_text.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -49,7 +70,7 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
-![alt text][image1]
+![alt text][image7]
 
 ### Pipeline (single images)
 
