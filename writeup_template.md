@@ -126,7 +126,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Functions `search_window()` and `search_prior()` does the job of identifying lane line pixels. 
+Functions `search_window()` (found in section IN 27 of ./project.ipynb)  and `search_prior()` (found in secion IN 28 of ./project.pynb)  does the job of identifying lane line pixels. 
 
 The former takes in a perspective transformed binary image as input. It then sums up the pixels along veritical direction of the image to possibly identify the right and left lanes of the image. The peaks shown on the below histogram represent summation of the pixels along y-axis and will tell where to search for lane pixels. The function defines  windows around the left and right peak positions obtained from the histogram at the bottom of the image. It then searches for a minimum of 50 pixels in those windows. If found, it adjusts the window position around the mean of the identified pixels, records the position of the pixels and then refits the windows in the next section of the image from the bottom. The search for pixels continues again in this new section of the image with in those windows. This process continues until the entire image is scanned from bottom to top.  At the end , the function identifies all left lane and right lane pixels and returns them back to calling process along with the coefficients required to fit a line through them
 
@@ -146,13 +146,33 @@ Now that i have done a blind search on the very first frame/image, i will then p
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+Code for computing the radius of curvature can be found in the last section of ./project.ipynb. 
+
+    # Fit new polynomials to x,y in world space
+    left_fit_cr = np.polyfit(ploty*ym_per_pix, left_fitx*xm_per_pix, 2)
+    right_fit_cr = np.polyfit(ploty*ym_per_pix, right_fitx*xm_per_pix, 2)
+    # Calculate the new radii of curvature
+    y_eval = np.max(ploty)
+    left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+    right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
+ 
+ For converting the pixels to real world measurements, i have assumed the width of lane line to be 3.7 meters (700 pixels on the image transformed binary image) and lane height to be 30 meters (720 pixels). As a first step , i fitted polynomial along the left and right lane pixels by multiplying the pixel values with appropriate conversion factor. Then I obtained second order derviative to obtain left and right lane curvature. At the end , i have taken the average of left and right lane curvature to arrive at the curvature of the lane.
+ 
+ 
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+Once i plotted the lane lines successfully, i have warped the plot back to the original undistored image/frame (2D view ) and filled the area between the identified lane lines with a color to visualize it. The below code in the last section of ./project.ipynb achieves this.
 
-![alt text][image6]
+    # Warp the blank back to original image space using inverse perspective matrix (Minv)
+    Minv = np.linalg.inv(M)
+    newwarp = cv2.warpPerspective(color_warp, Minv, (ccwarped.shape[1], ccwarped.shape[0])) 
+    # Combine the result with the original image
+    result = cv2.addWeighted(udst, 1, newwarp, 0.3, 0)  
+    
+Here is an example of my result on a test images:
+
+![alt text][image16]
 
 ---
 
