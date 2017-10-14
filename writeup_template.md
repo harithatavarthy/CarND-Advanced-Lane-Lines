@@ -86,22 +86,22 @@ I have passed these coefficents to `cv2.undistort()` function to demonstrate und
 
 I used a combination of color and gradient thresholds to generate a binary image. For my pipe line i settled with the following combination though i experiemented with various other combinations. 
 
-a. Gradient - Sobel(x) with a threshold of (50,255)
-b. Gradient - Sobel(y) with a threshold of (50,255)
-c. Magnitude Gradient - with a threshold of (50,100)
-d. Directional Gradient - with a threshold of (0.5, 1.3)
+    a. Gradient - Sobel(x) with a threshold of (50,255)
+    b. Gradient - Sobel(y) with a threshold of (50,255)
+    c. Magnitude Gradient - with a threshold of (50,100)
+    d. Directional Gradient - with a threshold of (0.5, 1.3)
 
-Then i combined the Gradient Thresholds above using the following method.
+Then I combined the Gradient Thresholds above using the following method.
 
-`combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1`
+    `combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1`
 
 Below is the output of this combination of Gradient Threshold
 
 ![alt text][image13]
 
+After that I explored various color spaces like HLS and Lab and experimented with them. After multiple experiements i settled down with 'Saturation Channel' of HLS color space. The S-Channel with a threshold of (200,255) ensured the lane lines are detected properly. Here is one example where lane lines detected in 'S' channel stand out compared to 'L' and 'H' channels of HLS color space
 
-
-![alt text][image3]
+![alt text][image15]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
