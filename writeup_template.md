@@ -126,9 +126,19 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Functions `search_window()` and `search_prior()` does the job of identifying lane line pixels. 
 
-![alt text][image5]
+The former takes in a perspective transformed binary image as input. It then sums up the pixels along veritical direction of the image to possibly identify the right and left lanes of the image. The peaks shown on the below histogram represent summation of the pixels along y-axis and will tell where to search for lane pixels. The function defines  windows around the left and right peak positions obtained from the histogram at the bottom of the image. It then searches for a minimum of 50 pixels in those windows. If found, it adjusts the window position around the mean of the identified pixels, records the position of the pixels and then refits the windows in the next section of the image from the bottom. The search for pixels continues again in this new section of the image with in those windows. This process continues until the entire image is scanned from bottom to top.  At the end , the function identifies all left lane and right lane pixels and returns them back to calling process.
+
+The below visual demonstrates the plotted histogram
+
+![alt text][image10]
+
+
+Once the left and right lane pixels are identified, lines are plotted through them using a second degree polynomial fit.
+Below visual demonstrates the fitted lines and the identified pixels.
+
+![alt text][image20]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
