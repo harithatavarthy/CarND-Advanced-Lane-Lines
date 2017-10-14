@@ -128,7 +128,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 Functions `search_window()` and `search_prior()` does the job of identifying lane line pixels. 
 
-The former takes in a perspective transformed binary image as input. It then sums up the pixels along veritical direction of the image to possibly identify the right and left lanes of the image. The peaks shown on the below histogram represent summation of the pixels along y-axis and will tell where to search for lane pixels. The function defines  windows around the left and right peak positions obtained from the histogram at the bottom of the image. It then searches for a minimum of 50 pixels in those windows. If found, it adjusts the window position around the mean of the identified pixels, records the position of the pixels and then refits the windows in the next section of the image from the bottom. The search for pixels continues again in this new section of the image with in those windows. This process continues until the entire image is scanned from bottom to top.  At the end , the function identifies all left lane and right lane pixels and returns them back to calling process.
+The former takes in a perspective transformed binary image as input. It then sums up the pixels along veritical direction of the image to possibly identify the right and left lanes of the image. The peaks shown on the below histogram represent summation of the pixels along y-axis and will tell where to search for lane pixels. The function defines  windows around the left and right peak positions obtained from the histogram at the bottom of the image. It then searches for a minimum of 50 pixels in those windows. If found, it adjusts the window position around the mean of the identified pixels, records the position of the pixels and then refits the windows in the next section of the image from the bottom. The search for pixels continues again in this new section of the image with in those windows. This process continues until the entire image is scanned from bottom to top.  At the end , the function identifies all left lane and right lane pixels and returns them back to calling process along with the coefficients required to fit a line through them
 
 The below visual demonstrates the plotted histogram
 
@@ -139,6 +139,10 @@ Once the left and right lane pixels are identified, lines are plotted through th
 Below visual demonstrates the fitted lines and the identified pixels.
 
 ![alt text][image20]
+
+
+Now that i have done a blind search on the very first frame/image, i will then pass the average 'Y' position of just identified lane lines to function `search_prior()` to process the next frame/image. This function instead of performing a blind search it would rather look for pixels around the average 'Y' position passed to it. This process continues for the rest of the frames/images by looking for pixels around the average 'Y' position from the prior frames until it breaks a certain threshold(in my case , its 50 pixels). Once the threshold is broken, the pipeline forces to perform a blind search again to ensure it does not lose track of lane lines and build confidence again.
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
