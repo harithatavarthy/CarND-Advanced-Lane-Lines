@@ -188,4 +188,13 @@ Here's a [link to my video result](./project_video_output_text.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+On my first attempt of running the pipeline against the project video, it was clearly evident that the pipeline did not do well on frames with poor lighting and shadows. To correct this, i explored and tried various color spaces along with different combinations of gradients.
+After many tries,  I felf that  'S-Channel' of HLS color space did a better job accurately identifying the lane line pixels. Hence fort , I used Saturation channel of HLS color space for my pipeline along with some combination of gradient.
+
+Though the issue with low lighting and shadows is resolved, i am now faced with a new challeng - Radius of curvature was way too high.
+It was reading about 10 to 15 kms all along and i felt some thing must be off. The only reason that i can think of is - My identified lane lines must be linear on every frame. Upon analysis, i found out that perspective transformation may be the culprit. I was being very conservative when transforming the image to birds eye view. My perspective transformed image is zoomed in and lane lines are so much linear. I have then adjusted the SRC and DST points that i used to transform the image. This change immediately improved the radius of curvature. The average radius through out the vide was between 1 to 2 kms.
+
+Finally, i tuned the pipeline to imrpove the overall performance and reduce the time taken to process the video input.
+
+Though my pipeline worked well on the project video, it did not work as expected on challenge videos. 
+The problem lies with accurately identifying the lane lines. Obviosuly the pipeline i designed will not work if there any lane like features in the image (which are not actually lane lines). The pipeline can be more robust my having a better gradient and color thresholding process that can accurately identify lane lines on any kind of image/frame.
