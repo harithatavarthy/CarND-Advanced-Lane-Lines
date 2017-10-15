@@ -45,6 +45,7 @@ The goals / steps of this project are the following:
 [image26]: ./output_images/Undistorted_Highway.png "Undistorted_Highway"
 [image27]: ./output_images/X_Gradient_Threshold.png "X_Gradient_Threshold"
 [image28]: ./output_images/Y_Gradient_Threshold.png "Y_Gradient_Threshold"
+[image29]: ./output_images/lenght_of_dashed_white_line_180px.png "lenght_of_dashed_white_line_180px"
 
 [video1]: ./project_video_output_text.mp4 "Video"
 
@@ -156,8 +157,11 @@ Code for computing the radius of curvature can be found in the last section of .
     left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
     right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
  
- For converting the pixels to real world measurements, i have assumed the width of lane line to be 3.7 meters (700 pixels on the image transformed binary image) and lane height to be 30 meters (720 pixels). As a first step , i fitted polynomial along the left and right lane pixels by multiplying the pixel values with appropriate conversion factor. Then I obtained second order derviative to obtain left and right lane curvature. At the end , i have taken the average of left and right lane curvature to arrive at the curvature of the lane.
- 
+ For converting the pixels to real world measurements, i have assumed the width of lane line to be 3.7 meters (700 pixels on the image transformed binary image. However the lane width that i used to compute curvature is dynamic and based on the distance between identified lane lines) and lane height to be 180 pixels for every 3.048 meters based on lenght of dashed white line on perspective transformed image. As a first step , i fitted polynomial along the left and right lane pixels by multiplying the pixel values with appropriate conversion factor. Then I obtained second order derviative to obtain left and right lane curvature. At the end , i have taken the average of left and right lane curvature to arrive at the curvature of the lane.
+
+Below figure justifies the 180 pixels per 3.048 meters of lane line. The standard white dashed line in general is 10 feet in lenght in real world. 10 ft is 3.048 meters. Per the figure below the height of dashed lane line on the right is approximately 180 pixels.
+
+![alt text][image29]
  
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
@@ -189,10 +193,11 @@ Here's a [link to my video result](./project_video_output_text.mp4)
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 On my first attempt of running the pipeline against the project video, it was clearly evident that the pipeline did not do well on frames with poor lighting and shadows. To correct this, i explored and tried various color spaces along with different combinations of gradients.
-After many tries,  I felf that  'S-Channel' of HLS color space did a better job accurately identifying the lane line pixels. Hence fort , I used Saturation channel of HLS color space for my pipeline along with some combination of gradient.
+After many tries,  I felf that  'b-Channel' of Lab color space did a better job accurately identifying the lane line pixels. Hence fort , I used Saturation channel of HLS color space for my pipeline along with some combination of gradient.
 
 Though the issue with low lighting and shadows is resolved, i am now faced with a new challeng - Radius of curvature was way too high.
-It was reading about 10 to 15 kms all along and i felt some thing must be off. The only reason that i can think of is - My identified lane lines must be linear on every frame. Upon analysis, i found out that perspective transformation may be the culprit. I was being very conservative when transforming the image to birds eye view. My perspective transformed image is zoomed in and lane lines are so much linear. I have then adjusted the SRC and DST points that i used to transform the image. This change immediately improved the radius of curvature. The  radius of curvature for majority of the frames in the video was between 1 to 2 kms.
+It was reading about 10 to 15 kms all along and i felt some thing must be off. The only reason that i can think of is - My identified lane lines must be linear on every frame. Upon analysis, i found out that perspective transformation may be the culprit. I was being very conservative when transforming the image to birds eye view. My perspective transformed image is zoomed in and lane lines are so much linear. I have then adjusted the SRC and DST points that i used to transform the image. This change immediately improved the radius of curvature. The  radius of curvature for majority of the frames with curving lane lines in the video was between 500 meters to 1000 meters.
+And for non curving lane lines, its in thousands of meters.
 
 Finally, i fine tuned the pipeline to imrpove the overall performance and reduce the time taken to process the video input.
 
