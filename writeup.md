@@ -100,12 +100,12 @@ Below is the output of this combination of Gradient Threshold
 
 ![alt text][image13]
 
-After that I explored various color spaces like HLS and Lab and experimented with them. After multiple experiements i settled down with 'Saturation Channel' of HLS color space. The S-Channel with a threshold of (200,255) ensured the lane lines are detected properly. Here is one example where lane lines detected in 'S' channel stand out compared to 'L' and 'H' channels of HLS color space
+After that I explored various color spaces like HLS and Lab and experimented with them. After multiple experiements i settled down with 'Lab - b channel ' of Lab color space. The Lab-b-Channel with a threshold of (190,255) ensured the lane lines are detected properly. Here is one example where lane lines detected in 'Lab-b' channel stand out compared to 'Lab-L' and 'Lab-a' channels of Lab color space
 
-![alt text][image15]
+![alt text][image17]
 
 Finally i combined the binary images obtained from  Gradient Thresholding and color thresholding in the following way
-    `color_combined_binary[(s_binary == 1) | (combined == 1)] = 1`
+    `color_combined_binary[(lab_b_binary == 1) | (combined == 1)] = 1`
 
 Here is how the combined output of the Gradient and Color thresholded image looked like
 
